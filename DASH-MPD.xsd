@@ -315,7 +315,8 @@
 			<xs:element name="PlaybackRate" type="PlaybackRateType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="OperatingQuality" type="OperatingQualityType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="OperatingBandwidth" type="OperatingBandwidthType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="ContentSteering" type="ContentSteeringType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ContentSteering" type="ContentSteeringType" minOccurs="0"/>
+			<xs:element name="ClientDataReporting" type="ClientDataReportingType" minOccurs="0"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:unsignedInt"/>
@@ -1191,31 +1192,6 @@
 		</xs:sequence>
 		<xs:attribute name="serviceLocations" type="StringVectorType"/>
 		<xs:attribute name="adaptationSets" type="UIntVectorType"/>
-		<xs:anyAttribute namespace="##other" processContents="lax"/>
-	</xs:complexType>
-	<!-- CMCDParameterType -->
-	<xs:complexType name="CMCDParameterType">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-			CMCD Parameters
-		</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="version" type="xs:unsignedInt"/>
-		<xs:attribute name="mode" default="query">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="header"/>
-					<xs:enumeration value="query"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="includeInRequests" type="xs:string" default="*"/>
-		<xs:attribute name="keys" type="StringVectorType"/>
-		<xs:attribute name="contentID" type="xs:string"/>
-		<xs:attribute name="sessionID" type="xs:string"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 </xs:schema>
