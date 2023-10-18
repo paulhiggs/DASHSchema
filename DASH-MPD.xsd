@@ -108,7 +108,7 @@
 		<xs:sequence>
 			<xs:element name="ProgramInformation" type="ProgramInformationType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="BaseURL" type="BaseURLType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="Location" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Location" type="LocationType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="PatchLocation" type="PatchLocationType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="ServiceDescription" type="ServiceDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="InitializationSet" type="InitializationSetType" minOccurs="0" maxOccurs="unbounded"/>
@@ -121,6 +121,7 @@
 			<xs:element name="SupplementalProperty" type="DescriptorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="UTCTiming" type="DescriptorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="LeapSecondInformation" type="LeapSecondInformationType" minOccurs="0"/>
+			<xs:element name="ContentSteering" type="ContentSteeringType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string"/>
@@ -147,6 +148,14 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
 				<xs:attribute name="ttl" type="xs:double" use="optional"/>
+				<xs:anyAttribute namespace="##other" processContents="lax"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LocationType">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute name="serviceLocation" type="xs:string"/>
 				<xs:anyAttribute namespace="##other" processContents="lax"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -248,7 +257,7 @@
 			<xs:element name="Selection" type="SelectionType" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="selectionInfo" type="xs:string"/>
-		<xs:attribute name="contactURL" type="xs:anyURI"  use="required"/>
+		<xs:attribute name="contactURL" type="xs:anyURI" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SelectionType">
 		<xs:annotation>
@@ -256,7 +265,7 @@
 		</xs:annotation>
 		<xs:attribute name="dataEncoding" type="ContentEncodingType"/>
 		<xs:attribute name="parameter" type="xs:string" use="required"/>
-	    <xs:attribute name="data" type="xs:string"/>
+		<xs:attribute name="data" type="xs:string"/>
 	</xs:complexType>
 	<xs:simpleType name="ContentEncodingType">
 		<xs:annotation>
@@ -306,11 +315,29 @@
 			<xs:element name="PlaybackRate" type="PlaybackRateType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="OperatingQuality" type="OperatingQualityType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="OperatingBandwidth" type="OperatingBandwidthType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ContentSteering" type="ContentSteeringType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:unsignedInt"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
+	<!--ContentSteering -->
+	<xs:complexType name="ContentSteeringType">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute ref="defaultServiceLocation"/>
+				<xs:attribute name="queryBeforeStart" type="xs:boolean" default="false"/>
+				<xs:attribute name="clientRequirement" type="xs:boolean" default="true"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:attribute name="defaultServiceLocation">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[a-zA-Z0-9_.\-,]+"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
 	<xs:complexType name="LatencyType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -1149,6 +1176,46 @@
 		<xs:attribute name="availabilityStartLeapOffset" type="xs:integer" use="required"/>
 		<xs:attribute name="nextAvailabilityStartLeapOffset" type="xs:integer"/>
 		<xs:attribute name="nextLeapChangeTime" type="xs:dateTime"/>
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:complexType>
+	<!-- ClientDataReporting -->
+	<xs:complexType name="ClientDataReportingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			Client Data Reporting
+		</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReportingSystem" type="DescriptorType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="serviceLocations" type="StringVectorType"/>
+		<xs:attribute name="adaptationSets" type="UIntVectorType"/>
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:complexType>
+	<!-- CMCDParameterType -->
+	<xs:complexType name="CMCDParameterType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			CMCD Parameters
+		</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="version" type="xs:unsignedInt"/>
+		<xs:attribute name="mode" default="query">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="header"/>
+					<xs:enumeration value="query"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="includeInRequests" type="xs:string" default="*"/>
+		<xs:attribute name="keys" type="StringVectorType"/>
+		<xs:attribute name="contentID" type="xs:string"/>
+		<xs:attribute name="sessionID" type="xs:string"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 </xs:schema>
