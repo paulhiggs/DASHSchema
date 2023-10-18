@@ -335,7 +335,7 @@
 	<xs:attribute name="defaultServiceLocation">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:pattern value="[a-zA-Z0-9_.\-,]+"/>
+				<xs:pattern value="[&alpha;&digit;_.\-,]+"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:attribute>
@@ -935,6 +935,7 @@
 					<xs:element name="BitstreamSwitching" type="URLType" minOccurs="0"/>
 				</xs:sequence>
 				<xs:attribute name="duration" type="xs:unsignedInt"/>
+				<xs:attribute name="tolerance" type="xs:unsignedInt"/>
 				<xs:attribute name="startNumber" type="xs:unsignedInt"/>
 				<xs:attribute name="endNumber" type="xs:unsignedInt"/>
 			</xs:extension>
