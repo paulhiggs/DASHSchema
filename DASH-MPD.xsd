@@ -152,7 +152,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
-				<xs:attribite name="serviceLocation" type="xs:string"/>
+				<xs:attribute name="serviceLocation" type="xs:string"/>
 				<xs:attribute name="ttl" type="xs:double" use="optional"/>
 				<xs:anyAttribute namespace="##other" processContents="lax"/>
 			</xs:extension>
