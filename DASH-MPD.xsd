@@ -152,6 +152,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
+				<xs:attribite name="serviceLocation" type="xs:string"/>
 				<xs:attribute name="ttl" type="xs:double" use="optional"/>
 				<xs:anyAttribute namespace="##other" processContents="lax"/>
 			</xs:extension>
@@ -626,6 +627,8 @@
 			<xs:element name="ContentPopularityRate" type="ContentPopularityRateType" minOccurs="0"
 				maxOccurs="unbounded"/>
 			<xs:element name="Resync" type="ResyncType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SegmentSequenceProperties" type="SegmentSequencePropertiesType"
+				minOccurs="0" maxOccurs="1"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="profiles" type="ListOfProfilesType"/>
@@ -885,8 +888,9 @@
 					<xs:element name="BitstreamSwitching" type="URLType" minOccurs="0"/>
 				</xs:sequence>
 				<xs:attribute name="duration" type="xs:unsignedInt"/>
-				<xs:attribute name="startNumber" type="xs:unsignedInt"/>
-				<xs:attribute name="endNumber" type="xs:unsignedInt"/>
+				<xs:attribute name="tolerence" type="xs:float" default="50.0"/>
+				<xs:attribute name="startNumber" type="xs:unsignedLong"/>
+				<xs:attribute name="endNumber" type="xs:unsignedLong"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1197,13 +1201,33 @@
 	
 	<xs:complexType name="SupVideoInfoType">
 		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				Picture-in-picture information
-			</xs:documentation>
+			<xs:documentation xml:lang="en"> Picture-in-picture information </xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="processingInfo" type="xs:string"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
-	
+
+	<xs:complexType name="SegmentSequencePropertiesType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en"> Segment Sequence properties </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SAP" type="SapWithCadenceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:complexType>
+
+	<xs:complexType name="SapWithCadenceType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en"> Segment Sequence SAP properties </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="SAPType" use="required"/>
+		<xs:attribute name="cadence" type="xs:unsignedInt" default="0"/>
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:complexType>
 
 </xs:schema>
