@@ -19,7 +19,7 @@
 
                 <SegmentTimeline>
                     <Pattern id="1">
-                        <P d=" 180480" r="11"/>
+                        <P d="180480" r="11"/>
                         <P d="176640"/>
                     </Pattern>
                     <S t="546975158" r="164" p="1" pE="3" d="0"/>
